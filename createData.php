@@ -5,6 +5,7 @@ if($con->connect_error) {
 	die("Connection failed: " . $con->connect_error);
 }
 while(($line = fgets($myfile)) !== false) {
+	$line = trim($line);
 	$attrs = explode("|", $line);
 	$title = addslashes($attrs[0]);
 	$artist = addslashes($attrs[1]);

@@ -10,9 +10,12 @@
 </head>
 
 <body>
-<h1>WELLCOME TO CSCE 608 project 1</h1>
+<h1 class=page-header style="margin-left: 30px;">WELLCOME TO CSCE 608 project 1</h1>
+<div class="container">
 <h3>Team Members: Kan Zheng, Di Wu</h3>
-<a href="./music.php">music</a><br>
-<a href="./user.php">user</a>
+<br>
+<a class="btn btn-default" style="font-size:20px;" href="./music.php" role="button">music</a>
+<a class="btn btn-default" style="font-size:20px;" href="./user.php" role="button">user</a>
+</div>
 </body>
 </html>
