@@ -20,7 +20,13 @@
 	<div class="dropdown">
 	Filter:
 	  <button class="btn btn-default dropdown-toggle" type="button" id="genreMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-	    <?php echo $_SESSION["genre"] ?>
+	    <?php 
+		    if(isset($_SESSION["genre"])) {
+		    	echo $_SESSION["genre"];
+		    }else {
+		    	echo "all";
+		    }
+	    ?>
 	    <span class="caret"></span>
 	  </button>
 	  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="dropdown">
@@ -99,6 +105,9 @@
 		$result = $con->query($sql);
 		if($result->num_rows > 0){
 			while($row = $result->fetch_assoc()) {
+				?>
+				
+				<?php
 				echo 
 				"<tr>
 					<td>" . $row["id"] . "</td>
@@ -108,8 +117,8 @@
 					<td>" . $row["timestamp"] . "</td>";
 				?>
 				<td>
-				<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-				<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon-pencil" aria-hidden="true" style="opacity:0.3" onmouseover="overRemoveMusic(this)" onmouseout="outRemoveMusic(this)"></span>
+				<span class="glyphicon glyphicon-remove" aria-hidden="true" style="opacity:0.3" onclick="removeMusic(this)" onmouseover="overRemoveMusic(this)" onmouseout="outRemoveMusic(this)"></span>
 				</td>
 				
 				<?php
@@ -147,7 +156,20 @@
 			document.getElementById("button-new-content").className = "glyphicon glyphicon-minus";
 			newForm.style.display = 'block';
 		}
-		
+	}
+
+	function overRemoveMusic(obj) {
+		obj.style.opacity = 1;
+	}
+
+	function outRemoveMusic(obj) {
+		obj.style.opacity = 0.3;
+	}
+
+	function removeMusic(obj) {
+		var id = $(obj).closest("tr").children()[0].innerHTML;
+		$.post('/removeMusic.php',{id: id});
+		window.location = "/music.php";
 	}
 </script>
 </body>
