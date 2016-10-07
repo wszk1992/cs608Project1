@@ -77,7 +77,8 @@
 			<th><a href="?orderBy=timestamp">Timestamp</a></th>
 		</tr>
 	</thead>
-	<tbody>
+	<tbody id="musicBody">
+	
 	<?php
 		$con = new mysqli("localhost", "root", "rhr5asiq1", "db");
 		if($con->connect_error) {
@@ -109,20 +110,20 @@
 				
 				<?php
 				echo 
-				"<tr>
+				"
+				<tr id='" . $row["id"] . "'>
 					<td>" . $row["id"] . "</td>
 					<td>" . $row["title"] . "</td>
 					<td>" . $row["genre"] . "</td>
 					<td>" . $row["artist"] . "</td>
 					<td>" . $row["timestamp"] . "</td>";
 				?>
-				<td>
-				<span class="glyphicon glyphicon-pencil" aria-hidden="true" style="opacity:0.3" onmouseover="overRemoveMusic(this)" onmouseout="outRemoveMusic(this)"></span>
-				<span class="glyphicon glyphicon-remove" aria-hidden="true" style="opacity:0.3" onclick="removeMusic(this)" onmouseover="overRemoveMusic(this)" onmouseout="outRemoveMusic(this)"></span>
-				</td>
-				
+					<td>
+					<span class="glyphicon glyphicon-pencil" aria-hidden="true" style="opacity:0.3" onclick="modifyMusic(this)" onmouseover="over(this)" onmouseout="out(this)"></span>
+					<span class="glyphicon glyphicon-remove" aria-hidden="true" style="opacity:0.3" onclick="removeMusic(this)" onmouseover="over(this)" onmouseout="out(this)"></span>
+					</td>
+				</tr>
 				<?php
-				echo "</tr>";
 			}
 		}
 		$con->close();
@@ -156,21 +157,48 @@
 			document.getElementById("button-new-content").className = "glyphicon glyphicon-minus";
 			newForm.style.display = 'block';
 		}
+
 	}
 
-	function overRemoveMusic(obj) {
+	function over(obj) {
 		obj.style.opacity = 1;
 	}
 
-	function outRemoveMusic(obj) {
+	function out(obj) {
 		obj.style.opacity = 0.3;
 	}
 
 	function removeMusic(obj) {
 		var id = $(obj).closest("tr").children()[0].innerHTML;
 		$.post('/removeMusic.php',{id: id});
-		window.location = "/music.php";
+		$("#" + id).remove();
 	}
+
+	function modifyMusic(obj) {
+		var title = $(obj).closest("tr").children()[1].innerHTML;
+		var genre = $(obj).closest("tr").children()[2].innerHTML;
+		var artist = $(obj).closest("tr").children()[3].innerHTML;
+		$(obj).closest("tr").children()[1].innerHTML = "<input type='text' name='title' value='" + title + "'>";
+		$(obj).closest("tr").children()[2].innerHTML = "<input type='text' name='genre' value='" + genre + "'>";
+		$(obj).closest("tr").children()[3].innerHTML = "<input type='text' name='artist' value='" + artist + "'>";
+		$(obj).closest("tr").children()[5].innerHTML = "<button type='button' class='btn btn-default' onclick='submitModifyMusic(this)'>Submit</button><button type='button' class='btn btn-default'>Cancel</button>";
+	}
+
+	function submitModifyMusic(obj) {
+		var id = $(obj).closest("tr").children()[0].innerHTML.replace("<br>","");
+		console.log(id);
+		var title = $(obj).closest("tr").children()[1].firstChild.value;
+		var genre = $(obj).closest("tr").children()[2].firstChild.value;
+		var artist = $(obj).closest("tr").children()[3].firstChild.value;
+		$.post('/modifyMusic.php',{id:id, title:title, genre:genre, artist:artist}, function(data) {
+			console.log(data);
+			$(obj).closest("tr").children()[1].innerHTML = title;
+			$(obj).closest("tr").children()[2].innerHTML = genre;
+			$(obj).closest("tr").children()[3].innerHTML = artist;
+			$(obj).closest("tr").children()[5].innerHTML = "<span class='glyphicon glyphicon-pencil' aria-hidden='true' style='opacity:0.3' onclick='modifyMusic(this)'' onmouseover='over(this)' onmouseout='out(this)'></span><span class='glyphicon glyphicon-remove' aria-hidden='true' style='opacity:0.3' onclick='removeMusic(this)' onmouseover='over(this)' onmouseout='out(this)'></span>";
+		});
+	}
+
 </script>
 </body>
 </html>
