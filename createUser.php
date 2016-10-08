@@ -1,5 +1,5 @@
 <?php
-$con = new mysqli("localhost", "root", "rhr5asiq1", "db");
+$con = new mysqli("database2.cs.tamu.edu", "wszk1992", "rhr5asiq1", "wszk1992");
 if($con->connect_error) {
 	die("Connection failed: " . $con->connect_error);
 }

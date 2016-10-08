@@ -1,22 +1,24 @@
 <?php
+	ob_start();
 	$id = $_POST["id"];
 	$title = $_POST["title"];
 	$genre = $_POST["genre"];
 	$artist = $_POST["artist"];
 
-	$con = new mysqli("localhost", "root", "rhr5asiq1", "db");
-	if($con->connect_error) {
-		die("Connection failed: " . $con->connect_error);
-	}
+	$con = mysql_connect("database2.cs.tamu.edu", "wszk1992", "rhr5asiq1") or die('Could not connect to server.');
+	mysql_select_db('wszk1992', $con) or die('Could not select database.');
 	$sql = "UPDATE music SET title='" . $title . "',genre='" . $genre . "',artist='" . $artist . "' WHERE id=" . $id;
-	//echo $sql;
-	if($con->query($sql) === TRUE) {
+	$result = mysql_query($sql);
+	if($result === TRUE) {
 		echo "record updated successfully";
 	} else {
-		echo "Error: " . $sql . "<br>" . $con->error;
+		echo "Error: " . $sql . "<br>";
 	}
+<<<<<<< HEAD
 
 	$con->close();
+=======
+>>>>>>> 6ccc58a3af2cbfa968657fe05b54da92400549f4
 	//header("Location: music.php");
 	die();
 ?>
