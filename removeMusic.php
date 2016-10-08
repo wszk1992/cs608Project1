@@ -1,18 +1,17 @@
 <?php
-	$con = new mysqli("localhost", "root", "rhr5asiq1", "db");
-	if($con->connect_error) {
-		die("Connection failed: " . $con->connect_error);
-	}
+	ob_start();
+	$con = mysql_connect("database2.cs.tamu.edu", "wszk1992", "rhr5asiq1") or die('Could not connect to server.');
+	mysql_select_db('wszk1992', $con) or die('Could not select database.');
 	$sql = "DELETE FROM music WHERE id = " . $_POST["id"];
-	echo $sql;
-	if($con->query($sql) === TRUE) {
+	$result = mysql_query($sql);
+	if($result === TRUE) {
 		echo "record removed successfully";
 	} else {
-		echo "Error: " . $sql . "<br>" . $con->error;
+		echo "Error: " . $sql . "<br>";
 	}
 
-	$con->close();
+	//mysql_free_result($result);
 
-	header("Location: music.php");
+	header("Location: ./music.php");
 	die();
 ?>

@@ -8,12 +8,12 @@
 <html lang="en">
 <head>
  <meta charset="utf-8">
- <link href="/css/bootstrap.min.css" rel="stylesheet">
+ <link href="./css/bootstrap.min.css" rel="stylesheet">
  <title>Project1</title>
 </head>
 
 <body>
-<h1 class=page-header style="margin-left: 30px;"><a href="/">CSCE 608 PROJECT 1</a></h1>
+<h1 class=page-header style="margin-left: 30px;"><a href="./">CSCE 608 PROJECT 1</a></h1>
 <div class="container">
 
 <h3>Music List</h3>
@@ -46,7 +46,7 @@
 	<button type="button" class="btn btn-default btn-lg" style="padding:5px 10px;font-size: 12px;    border-radius: 10px;" onclick="newMusic()">
 	  <span id="button-new-content" class="glyphicon glyphicon-plus" aria-hidden="true"></span> new
 	</button>
-	<form id="newForm" class="form" style="display: none;" action="/newMusic.php" method="post">
+	<form id="newForm" class="form" style="display: none;" action="./newMusic.php" method="post">
 	  <div class="form-group">
 	    <label for="exampleInputTitle">Title</label>
 	    <input type="text" class="form-control" id="exampleInputTitle" name="title">
@@ -80,10 +80,8 @@
 	<tbody id="musicBody">
 	
 	<?php
-		$con = new mysqli("localhost", "root", "rhr5asiq1", "db");
-		if($con->connect_error) {
-			die("Connection failed: " . $con->connect_error);
-		}
+		$con = mysql_connect("database2.cs.tamu.edu", "wszk1992", "rhr5asiq1") or die('Could not connect to server.');
+		mysql_select_db('wszk1992', $con) or die('Could not select database.');
 		$order = 'id';
 		$genre = '';
 		if(isset($_SESSION["genre"]) && in_array($_SESSION["genre"], $genreBy)) {
@@ -103,48 +101,45 @@
 
 		$sql = "SELECT * FROM music " . $genre . " ORDER BY " . $order;
 		//echo $sql;
-		$result = $con->query($sql);
-		if($result->num_rows > 0){
-			while($row = $result->fetch_assoc()) {
-				?>
-				
-				<?php
-				echo 
-				"
-				<tr id='" . $row["id"] . "'>
-					<td>" . $row["id"] . "</td>
-					<td>" . $row["title"] . "</td>
-					<td>" . $row["genre"] . "</td>
-					<td>" . $row["artist"] . "</td>
-					<td>" . $row["timestamp"] . "</td>";
-				?>
-					<td>
-					<span class="glyphicon glyphicon-pencil" aria-hidden="true" style="opacity:0.3" onclick="modifyMusic(this)" onmouseover="over(this)" onmouseout="out(this)"></span>
-					<span class="glyphicon glyphicon-remove" aria-hidden="true" style="opacity:0.3" onclick="removeMusic(this)" onmouseover="over(this)" onmouseout="out(this)"></span>
-					</td>
-				</tr>
-				<?php
-			}
+		$result = mysql_query($sql);
+		while($row = mysql_fetch_array($result)) {
+			?>
+			
+			<?php
+			echo 
+			"
+			<tr id='" . $row["id"] . "'>
+				<td>" . $row["id"] . "</td>
+				<td>" . $row["title"] . "</td>
+				<td>" . $row["genre"] . "</td>
+				<td>" . $row["artist"] . "</td>
+				<td>" . $row["timestamp"] . "</td>";
+			?>
+				<td>
+				<div><span class="glyphicon glyphicon-pencil" aria-hidden="true" style="opacity:0.3" onclick="modifyMusic(this)" onmouseover="over(this)" onmouseout="out(this)"></span><div>
+				<div><span class="glyphicon glyphicon-remove" aria-hidden="true" style="opacity:0.3" onclick="removeMusic(this)" onmouseover="over(this)" onmouseout="out(this)"></span><div>
+				</td>
+			</tr>
+			<?php
 		}
-		$con->close();
+		mysql_free_result($result);
 	?>
 	</tbody>
 
 </table>
 </div>
 
-<script src="javascripts/jquery-3.1.0.min.js"></script>
-<script src="javascripts/bootstrap.min.js"></script>
+<script src="./javascripts/jquery-3.1.0.min.js"></script>
+<script src="./javascripts/bootstrap.min.js"></script>
 <script type="text/javascript">
 	var ul = document.getElementById("dropdown");
 	var genres = ul.getElementsByTagName("li");
 	for(var i = 0; i < genres.length; i++) {
 		var genre = genres[i].getElementsByTagName("a")[0];
 		genre.addEventListener('click', function() {
-			$.post('/setsession.php',{genre: this.innerHTML});
-			console.log(this.innerHTML);
-			document.getElementById("genreMenu").innerHTML = this.innerHTML;
-			window.location = "/music.php";
+			$.post('./setsession.php',{genre: this.innerHTML});
+			//console.log(this.innerHTML);
+			window.location = "./music.php";
 		}, false); 
 	}
 
@@ -170,18 +165,27 @@
 
 	function removeMusic(obj) {
 		var id = $(obj).closest("tr").children()[0].innerHTML;
-		$.post('/removeMusic.php',{id: id});
+		$.post('./removeMusic.php',{id: id});
 		$("#" + id).remove();
 	}
 
 	function modifyMusic(obj) {
+		var genreBy = ['alternative', 'blues', 'classical', 'country', 'electronic', 'hip hop', 'jazz', 'R&amp;B', 'rock'];
 		var title = $(obj).closest("tr").children()[1].innerHTML;
 		var genre = $(obj).closest("tr").children()[2].innerHTML;
 		var artist = $(obj).closest("tr").children()[3].innerHTML;
 		$(obj).closest("tr").children()[1].innerHTML = "<input type='text' name='title' value='" + title + "'>";
-		$(obj).closest("tr").children()[2].innerHTML = "<input type='text' name='genre' value='" + genre + "'>";
+		var allGenre;
+		for(let gen of genreBy) {
+			if(gen === genre) {
+				allGenre += "<option selected='selected'>" + gen + "</option>";
+			}else {
+				allGenre += "<option>" + gen + "</option>";				
+			}
+		}
+		$(obj).closest("tr").children()[2].innerHTML = "<select class='form-control' selected='selected' name='genre'>" + allGenre + "</select>";
 		$(obj).closest("tr").children()[3].innerHTML = "<input type='text' name='artist' value='" + artist + "'>";
-		$(obj).closest("tr").children()[5].innerHTML = "<button type='button' class='btn btn-default' onclick='submitModifyMusic(this)'>Submit</button><button type='button' class='btn btn-default'>Cancel</button>";
+		$(obj).closest("tr").children()[5].innerHTML = "<button type='button' class='btn btn-default' onclick='submitModifyMusic(this)'>Submit</button><button type='button' class='btn btn-default' onclick='returnModifyMusic(this,\"" + title +"\",\"" + genre + "\",\"" + artist + "\")'>Cancel</button>";
 	}
 
 	function submitModifyMusic(obj) {
@@ -190,13 +194,16 @@
 		var title = $(obj).closest("tr").children()[1].firstChild.value;
 		var genre = $(obj).closest("tr").children()[2].firstChild.value;
 		var artist = $(obj).closest("tr").children()[3].firstChild.value;
-		$.post('/modifyMusic.php',{id:id, title:title, genre:genre, artist:artist}, function(data) {
-			console.log(data);
-			$(obj).closest("tr").children()[1].innerHTML = title;
-			$(obj).closest("tr").children()[2].innerHTML = genre;
-			$(obj).closest("tr").children()[3].innerHTML = artist;
-			$(obj).closest("tr").children()[5].innerHTML = "<span class='glyphicon glyphicon-pencil' aria-hidden='true' style='opacity:0.3' onclick='modifyMusic(this)'' onmouseover='over(this)' onmouseout='out(this)'></span><span class='glyphicon glyphicon-remove' aria-hidden='true' style='opacity:0.3' onclick='removeMusic(this)' onmouseover='over(this)' onmouseout='out(this)'></span>";
+		$.post('./modifyMusic.php',{id:id, title:title, genre:genre, artist:artist}, function() {
+			returnModifyMusic(obj, title, genre, artist);
 		});
+	}
+
+	function returnModifyMusic(obj, title, genre, artist) {
+		$(obj).closest("tr").children()[1].innerHTML = title;
+		$(obj).closest("tr").children()[2].innerHTML = genre;
+		$(obj).closest("tr").children()[3].innerHTML = artist;
+		$(obj).closest("tr").children()[5].innerHTML = "<div><span class='glyphicon glyphicon-pencil' aria-hidden='true' style='opacity:0.3' onclick='modifyMusic(this)'' onmouseover='over(this)' onmouseout='out(this)'></span></div><div><span class='glyphicon glyphicon-remove' aria-hidden='true' style='opacity:0.3' onclick='removeMusic(this)' onmouseover='over(this)' onmouseout='out(this)'></span></div>";
 	}
 
 </script>
