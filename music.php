@@ -78,97 +78,56 @@
 		</tr>
 	</thead>
 	<tbody id="musicBody">
-
-	<div data-role="content">
-		<div class="row">
-			<div class="col-lg-6">
-				<form method="post" action="setsession1.php">
-					<div data-role="fieldcontain">
-					
-					
-							
-<div class="dropdown">
-	<label for="search">Search: </label>
-							
-<button class="btn btn-default dropdown-toggle" type="button" id="attribute" data-toggle="dropdown" aria-haspopup="true"
-									aria-expanded="false">
-								<?php 
-									if(isset($_SESSION["search"])) {
-									echo $_SESSION["search"];}
-									else {
-										echo "Title";}
-								?>  
-			    			<span class="caret"></span>
-	 						</button>
-            				<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" id="dropdown1" >
-                				<li><a href="#">Id</a></li>
-                				<li><a href="#">Title</a></li>
-                				<li><a href="#">Genre</a></li>
-               					<li><a href="#">Artist</a></li>
-                				<li><a href="#">Timestamp</a></li>
-           				    </ul>
-							   <input type="search" name="content" id="content" placeholder="Searching...">
-							   <input class="btn btn-default" type="submit" data-inline="true" value="Go!">
-</div>
-						 
-						
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-
-
-
-
-
- <?php
- $con1= new mysqli("localhost", "root", "rhr5asiq1", "db");
- // Check connection
- if ($con1->connect_error){
- die('Failed to connect to MySQL:' . mysqli_error());}
- $order = 'id';
- $search = '';
- $content = '';
- if (isset($_SESSION["search"]))
- {
-    $search = $_SESSION["search"];
- }
-if (isset($_SESSION["content"]))
- {
-    $content = $_SESSION["content"];
-    }
-	else $content='title';
- if(isset($_GET['orderBy']) && in_array($_GET['orderBy'], $orderBy)) {
- $order = $_GET['orderBy'];
- }
- $result1 = $con1->query("SELECT * FROM music WHERE $search LIKE '%$content%' ORDER BY $order");
- 	//	$sql1 ="SELECT * FROM music WHERE $search = '$content' ORDER BY $order";
-		echo $result1;
-	//	$result1 = $con1->query($sql1);
- //echo "SELECT * FROM music WHERE $search = '$content' ORDER BY $order";
- if($result1->num_rows > 0){
- 	echo $result1->num_rows;
- while($row1 = mysqli_fetch_assoc($result1))
- 			{
-				echo 
-				"<tr>
-					<td>" . $row1["id"] . "</td>
-					<td>" . $row1["title"] . "</td>
-					<td>" . $row1["genre"] . "</td>
-					<td>" . $row1["artist"] . "</td>
-					<td>" . $row1["timestamp"] . "</td>";
-?>
-				<td>
-				<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-				<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-				</td>
-				<?php
-				echo "</tr>";
+	
+	<?php
+		$con = new mysqli("localhost", "root", "rhr5asiq1", "db");
+		if($con->connect_error) {
+			die("Connection failed: " . $con->connect_error);
+		}
+		$order = 'id';
+		$genre = '';
+		if(isset($_SESSION["genre"]) && in_array($_SESSION["genre"], $genreBy)) {
+			$genre = $_SESSION["genre"];
+			if($genre === 'all') {
+				$genre = '';
+			}else {
+				if($genre === 'R&amp;B') {
+					$genre = 'R&B';
+				}
+				$genre = " WHERE genre = '" . $genre . "'";
 			}
- }
-?>
+		}
+		if(isset($_GET['orderBy']) && in_array($_GET['orderBy'], $orderBy)) {
+			$order = $_GET['orderBy'];
+		}
 
+		$sql = "SELECT * FROM music " . $genre . " ORDER BY " . $order;
+		//echo $sql;
+		$result = $con->query($sql);
+		if($result->num_rows > 0){
+			while($row = $result->fetch_assoc()) {
+				?>
+				
+				<?php
+				echo 
+				"
+				<tr id='" . $row["id"] . "'>
+					<td>" . $row["id"] . "</td>
+					<td>" . $row["title"] . "</td>
+					<td>" . $row["genre"] . "</td>
+					<td>" . $row["artist"] . "</td>
+					<td>" . $row["timestamp"] . "</td>";
+				?>
+					<td>
+					<div><span class="glyphicon glyphicon-pencil" aria-hidden="true" style="opacity:0.3" onclick="modifyMusic(this)" onmouseover="over(this)" onmouseout="out(this)"></span><div>
+					<div><span class="glyphicon glyphicon-remove" aria-hidden="true" style="opacity:0.3" onclick="removeMusic(this)" onmouseover="over(this)" onmouseout="out(this)"></span><div>
+					</td>
+				</tr>
+				<?php
+			}
+		}
+		$con->close();
+	?>
 	</tbody>
 
 </table>
