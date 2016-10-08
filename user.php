@@ -5,12 +5,12 @@
 <html lang="en">
 <head>
  <meta charset="utf-8">
- <link href="/css/bootstrap.min.css" rel="stylesheet">
+ <link href="./css/bootstrap.min.css" rel="stylesheet">
  <title>Project1</title>
 </head>
 
 <body>
-<h1 class=page-header style="margin-left: 30px;" ><a href="/">CSCE 608 PROJECT 1</a></h1>
+<h1 class=page-header style="margin-left: 30px;" ><a href="./">CSCE 608 PROJECT 1</a></h1>
 <div class="container">
 <h3>User List</h3>
 <table class="table">

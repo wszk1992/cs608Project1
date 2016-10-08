@@ -17,7 +17,6 @@
 	}
 
 	$con->close();
-	return $sql;
 	//header("Location: music.php");
 	die();
 ?>

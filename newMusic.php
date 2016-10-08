@@ -19,6 +19,6 @@
 
 	$con->close();
 
-	header("Location: music.php");
+	header("Location: ./music.php");
 	die();
 ?>
