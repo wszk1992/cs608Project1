@@ -10,7 +10,10 @@
 </head>
 
 <body>
+<div class="jumbotron">
 <h1 class=page-header style="margin-left: 30px;">WELLCOME TO CSCE 608 project 1</h1>
+<h2 class=page-header style="margin-left: 30px;">Music Management Database</h2>
+</div>
 <div class="container">
 <h3>Team Members: Kan Zheng, Di Wu</h3>
 <br>

@@ -13,7 +13,9 @@
 </head>
 
 <body>
-<h1 class=page-header style="margin-left: 30px;"><a href="./">CSCE 608 PROJECT 1</a></h1>
+<div class="jumbotron" style="margin-bottom: 10px;padding-top: 2px;padding-bottom: 2px;">
+<h2 class=page-header style="margin-left: 30px;"><a href="./">CSCE 608 PROJECT 1 - Music Management Database</a></h2>
+</div>
 <div class="container">
 
 <h3>Music List</h3>
