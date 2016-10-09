@@ -1,6 +1,6 @@
 <?php
 $myfile = fopen("./data.txt",'r') or die("Unable to open file!");
-$con = new mysqli("database2.cs.tamu.edu", "wszk1992", "rhr5asiq1", "wszk1992");
+$con = new mysqli("localhost", "root", "rhr5asiq1", "db");
 if($con->connect_error) {
 	die("Connection failed: " . $con->connect_error);
 }

@@ -24,8 +24,7 @@
  </thead>
  <tbody>
  	<?php
-		$con = mysql_connect("database2.cs.tamu.edu", "wszk1992", "rhr5asiq1") or die('Could not connect to server.');
-		mysql_select_db('wszk1992', $con) or die('Could not select database.');
+		$con = new mysqli("localhost", "root", "rhr5asiq1", "db");
 		$order = 'id';
 		$orderBy = array('id', 'username', 'title', 'rate');
 		if($con->connect_error) {
@@ -36,8 +35,8 @@
 		}
 		$sql = "SELECT user.id, user.username, music.title, user.rate FROM user INNER JOIN music ON user.favorite=music.id ORDER BY " . $order;
 		//echo $sql;
-		$result = mysql_query($sql);
-		while($row = mysql_fetch_array($result)) {
+		$result = $con->query($sql);
+		while($row = $result->fetch_assoc()) {
 			echo 
 			"<tr>
 				<td>" . $row["id"] . "</td>
@@ -47,7 +46,6 @@
 			</tr>";
 
 		}
-		mysql_free_result($result);
 	?>
  </tbody>
 
