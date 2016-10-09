@@ -1,5 +1,4 @@
 <?php
-	ob_start();
 	$con = new mysqli("localhost", "root", "rhr5asiq1", "db");
 	$sql = "DELETE FROM music WHERE id = " . $_POST["id"];
 	if($con->query($sql) === TRUE) {

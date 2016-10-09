@@ -67,6 +67,47 @@
 	  </div>
 	  <button type="submit" class="btn btn-default">Submit</button>
 	</form>
+
+<div data-role="content">
+		<div class="row">
+			<div class="col-lg-6">
+				<form method="post" action="setsession1.php">
+					<div data-role="fieldcontain">
+					
+					
+<!-- wd -->							
+<div class="dropdown">
+	<label for="search">Search: </label>
+							
+<button class="btn btn-default dropdown-toggle" type="button" id="attribute" data-toggle="dropdown" aria-haspopup="true"
+									aria-expanded="false">
+								<?php 
+									if(isset($_SESSION["search"])) {
+									echo $_SESSION["search"];}
+									else {
+										echo "Title";}
+								?>  
+			    			<span class="caret"></span>
+	 						</button>
+            				<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" id="dropdown1" >
+                				<li><a href="#">Id</a></li>
+                				<li><a href="#">Title</a></li>
+                				<li><a href="#">Genre</a></li>
+               					<li><a href="#">Artist</a></li>
+                				<li><a href="#">Timestamp</a></li>
+           				    </ul>
+							   <input type="search" name="content" id="content" placeholder="Searching..." value=<?php echo $_SESSION["content"] ?>>
+							   <input class="btn btn-default" type="submit" data-inline="true" value="Go!">
+</div>
+						 
+						
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+<!-- wd-end -->	
 <table class="table">
 	<thead>
 		<tr>
@@ -86,6 +127,19 @@
 		}
 		$order = 'id';
 		$genre = '';
+		$search = '';
+		$content = '';
+		if (isset($_SESSION["search"])) {
+			$search = $_SESSION["search"];
+		}else {
+			$search = 'title';	
+		} 
+		if (isset($_SESSION["content"])) {
+			$content = $_SESSION["content"];
+		}else {
+			$content='';
+		}
+
 		if(isset($_SESSION["genre"]) && in_array($_SESSION["genre"], $genreBy)) {
 			$genre = $_SESSION["genre"];
 			if($genre === 'all') {
@@ -101,9 +155,7 @@
 			$order = $_GET['orderBy'];
 		}
 
-		$sql = "SELECT * FROM music " . $genre . " ORDER BY " . $order;
-		//echo $sql;
-		$result = $con->query($sql);
+ 		$result = $con->query("SELECT * FROM music WHERE $search LIKE '%$content%' $genre ORDER BY $order");
 		if($result->num_rows > 0){
 			while($row = $result->fetch_assoc()) {
 				?>
@@ -146,7 +198,19 @@
 			window.location = "./music.php";
 		}, false); 
 	}
-
+	//wd
+	var ul = document.getElementById("dropdown1");
+	var searches = ul.getElementsByTagName("li");
+	for(var i = 0; i < searches.length; i++) {
+		var search = searches[i].getElementsByTagName("a")[0];
+		search.addEventListener('click', function() {
+			$.post('./setsession2.php',{search: this.innerHTML});
+		//	console.log(this.innerHTML);
+			document.getElementById("attribute").innerHTML = this.innerHTML;
+		//	window.location = "./music.php";
+		}, false); 
+	}
+	//wd--end
 	function newMusic() {
 		var newForm = document.getElementById("newForm");
 		if(newForm.style.display === 'block') {

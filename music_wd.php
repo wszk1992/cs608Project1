@@ -68,6 +68,7 @@
 	  <button type="submit" class="btn btn-default">Submit</button>
 	</form>
 
+
 <div data-role="content">
 		<div class="row">
 			<div class="col-lg-6">
@@ -96,7 +97,7 @@
                					<li><a href="#">Artist</a></li>
                 				<li><a href="#">Timestamp</a></li>
            				    </ul>
-							   <input type="search" name="content" id="content" placeholder="Searching...">
+							   <input type="search" name="content" id="content" placeholder="Searching..." value=<?php echo $_SESSION["content"] ?>>
 							   <input class="btn btn-default" type="submit" data-inline="true" value="Go!">
 </div>
 						 
@@ -118,8 +119,6 @@
 	</thead>
 	<tbody id="musicBody">
 	<!--  -------------------------------------------------------------------------------------------  -->
-
-
 
 
 
