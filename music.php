@@ -43,31 +43,7 @@
 	  </ul>
 	</div>
 	<br>
-	<button type="button" class="btn btn-default btn-lg" style="padding:5px 10px;font-size: 12px;    border-radius: 10px;" onclick="newMusic()">
-	  <span id="button-new-content" class="glyphicon glyphicon-plus" aria-hidden="true"></span> new
-	</button>
-	<form id="newForm" class="form" style="display: none;" action="/newMusic.php" method="post">
-	  <div class="form-group">
-	    <label for="exampleInputTitle">Title</label>
-	    <input type="text" class="form-control" id="exampleInputTitle" name="title">
-	  </div>
-	  <div class="form-group">
-	    <label for="exampleInputGenre">Genre</label>
-	    <select class="form-control" name="genre">
-	    <?php
-	    	foreach($genreBy as $genre) {
-	    		echo "<option>" . $genre . "</option>";
-	    	}
-		?>
-		</select>
-	  </div>
-	  <div class="form-group">
-	    <label for="exampleInputArtist">Artist</label>
-	    <input type="text" class="form-control" id="exampleInputArtist" name="artist">
-	  </div>
-	  <button type="submit" class="btn btn-default">Submit</button>
-	</form>
-
+<!-- wd -->	
 <div data-role="content">
 		<div class="row">
 			<div class="col-lg-6">
@@ -75,7 +51,7 @@
 					<div data-role="fieldcontain">
 					
 					
-<!-- wd -->							
+						
 <div class="dropdown">
 	<label for="search">Search: </label>
 							
@@ -108,6 +84,32 @@
 	</div>
 
 <!-- wd-end -->	
+<br>
+	<button type="button" class="btn btn-default btn-lg" style="padding:5px 10px;font-size: 12px;    border-radius: 10px;" onclick="newMusic()">
+	  <span id="button-new-content" class="glyphicon glyphicon-plus" aria-hidden="true"></span> new
+	</button>
+	<form id="newForm" class="form" style="display: none;" action="/newMusic.php" method="post">
+	  <div class="form-group">
+	    <label for="exampleInputTitle">Title</label>
+	    <input type="text" class="form-control" id="exampleInputTitle" name="title">
+	  </div>
+	  <div class="form-group">
+	    <label for="exampleInputGenre">Genre</label>
+	    <select class="form-control" name="genre">
+	    <?php
+	    	foreach($genreBy as $genre) {
+	    		echo "<option>" . $genre . "</option>";
+	    	}
+		?>
+		</select>
+	  </div>
+	  <div class="form-group">
+	    <label for="exampleInputArtist">Artist</label>
+	    <input type="text" class="form-control" id="exampleInputArtist" name="artist">
+	  </div>
+	  <button type="submit" class="btn btn-default">Submit</button>
+	</form>
+
 <table class="table">
 	<thead>
 		<tr>
