@@ -148,7 +148,7 @@
 				if($genre === 'R&amp;B') {
 					$genre = 'R&B';
 				}
-				$genre = " WHERE genre = '" . $genre . "'";
+				$genre = "and genre = '" . $genre . "'";
 			}
 		}
 		if(isset($_GET['orderBy']) && in_array($_GET['orderBy'], $orderBy)) {
